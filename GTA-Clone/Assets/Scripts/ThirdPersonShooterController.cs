@@ -27,10 +27,12 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        Transform hitTransform = null;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
             debugTransform.position = raycastHit.point;
             mouseWorldPosition = raycastHit.point;
+            hitTransform = raycastHit.transform;
         }
 
 
@@ -46,11 +48,23 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
 
+            if (starterAssetsInputs.shoot)
+            {
+                if (hitTransform != null)
+                {
+                    // hit something
+                    Debug.Log("Hit " + hitTransform.name);
+                }
+
+            }
+
         } else
         {
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivty(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
         }
+
+        starterAssetsInputs.shoot = false;
     }
 }
