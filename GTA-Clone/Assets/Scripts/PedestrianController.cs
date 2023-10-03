@@ -10,6 +10,7 @@ public class PedestrianController : MonoBehaviour
     [SerializeField] private Vector3 walkPoint;
 
     private NavMeshAgent agent;
+    private Animator animator;
     private Vector3 destination;
     private bool walkPointSet;
     private bool reachedDestination;
@@ -17,6 +18,7 @@ public class PedestrianController : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
@@ -31,7 +33,13 @@ public class PedestrianController : MonoBehaviour
         if (!agentActive || agent.enabled == false) return;
 
         if (walkPointSet) CheckPathComplete();
+        MovementAnimations();
         Roam();
+    }
+
+    void MovementAnimations()
+    {
+        if (animator) animator.SetFloat("MoveMagnitude", agent.velocity.magnitude);
     }
 
     void Roam()
