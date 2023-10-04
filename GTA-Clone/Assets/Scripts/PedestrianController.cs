@@ -14,7 +14,9 @@ public class PedestrianController : MonoBehaviour
         Attack
     }
 
+    [SerializeField] private float health = 100f;
     [SerializeField] private bool agentActive = true;
+    [SerializeField] private bool forceIdle = false;
     [SerializeField] private float walkPointRange;
     [SerializeField] private Vector3 walkPoint;
 
@@ -116,6 +118,7 @@ public class PedestrianController : MonoBehaviour
 
     void HandleWalkState()
     {
+        if (forceIdle) TransitionToState(State.Idle);
         if (walkPointSet) CheckPathComplete();
 
         MovementAnimations();
@@ -234,5 +237,19 @@ public class PedestrianController : MonoBehaviour
         if (agent.isActiveAndEnabled) agent.SetDestination(destination);
         this.destination = destination;
         reachedDestination = false;
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        health -= damageAmount;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

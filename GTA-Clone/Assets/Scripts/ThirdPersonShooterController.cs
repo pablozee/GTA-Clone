@@ -64,6 +64,12 @@ public class ThirdPersonShooterController : MonoBehaviour
                 if (hitTransform != null)
                 {
                     // hit something
+                    PedestrianController pedestrianController;
+                    hitTransform.TryGetComponent<PedestrianController>(out pedestrianController);
+                    if (pedestrianController)
+                    {
+                        pedestrianController.TakeDamage(100f);
+                    }
                     Debug.Log("Hit " + hitTransform.name);
                 }
 
